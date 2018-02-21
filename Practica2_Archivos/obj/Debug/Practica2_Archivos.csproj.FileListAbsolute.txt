@@ -1,0 +1,10 @@
+C:\Users\Carlos\source\repos\Practica2_Archivos\Practica2_Archivos\bin\Debug\Practica2_Archivos.exe.config
+C:\Users\Carlos\source\repos\Practica2_Archivos\Practica2_Archivos\bin\Debug\Practica2_Archivos.exe
+C:\Users\Carlos\source\repos\Practica2_Archivos\Practica2_Archivos\bin\Debug\Practica2_Archivos.pdb
+C:\Users\Carlos\source\repos\Practica2_Archivos\Practica2_Archivos\obj\Debug\Practica2_Archivos.csprojResolveAssemblyReference.cache
+C:\Users\Carlos\source\repos\Practica2_Archivos\Practica2_Archivos\obj\Debug\Practica2_Archivos.Form1.resources
+C:\Users\Carlos\source\repos\Practica2_Archivos\Practica2_Archivos\obj\Debug\Practica2_Archivos.Properties.Resources.resources
+C:\Users\Carlos\source\repos\Practica2_Archivos\Practica2_Archivos\obj\Debug\Practica2_Archivos.csproj.GenerateResource.Cache
+C:\Users\Carlos\source\repos\Practica2_Archivos\Practica2_Archivos\obj\Debug\Practica2_Archivos.csproj.CoreCompileInputs.cache
+C:\Users\Carlos\source\repos\Practica2_Archivos\Practica2_Archivos\obj\Debug\Practica2_Archivos.exe
+C:\Users\Carlos\source\repos\Practica2_Archivos\Practica2_Archivos\obj\Debug\Practica2_Archivos.pdb
