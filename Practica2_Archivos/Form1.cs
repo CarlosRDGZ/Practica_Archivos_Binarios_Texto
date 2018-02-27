@@ -6,26 +6,20 @@ namespace Practica2_Archivos
 {
     public partial class Form1 : Form
     {
-        public const string XML_TEMPLATE =
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
-            "<contacto>\r\n" +
-            "\t<nombre>~n~</nombre>\r\n" +
-            "\t<apellido>~a~</apellido>\r\n" +
-            "\t<telefono>~t~</telefono>\r\n" +
-            "\t<direccion>~d~</direccion>\r\n>" +
-            "\t<email>~e~</email>\r\n" +
-            "</contacto>";
-
         public Form1()
         {
             InitializeComponent();
             openFD.Filter = "Bitmap|*.bmp";
+            saveFD.Filter = "XML|*.xml";
         }
 
         private void BtnSearchImg_Click(object sender, EventArgs e)
         {
             openFD.ShowDialog();
-            txtImgInfo.Text = ImgInfo(openFD.FileName);
+            if (openFD.FileName != "")
+                txtImgInfo.Text = ImgInfo(openFD.FileName);
+            else
+                txtImgInfo.Text = "No image selected";
         }
 
         // ReturnedString: {
@@ -75,6 +69,9 @@ namespace Practica2_Archivos
             // DATA_SIZE
             int imgDataSize = reader.ReadInt32();
 
+            reader.Close();
+            stream.Close();
+
             return "Tamaño real en bytes: " + imgDataSize + "\r\n"
                  + "Ancho: " + width + "\r\n"
                  + "Alto: " + height + "\r\n"
@@ -112,18 +109,194 @@ namespace Practica2_Archivos
 
         private void BtnSaveData_Click(object sender, EventArgs e)
         {
-            Console.WriteLine(GenerateXML("Carlos", "Rodriguez", "3123175976", "Direccion", "some.mail@fakemail.com"));
+            saveFD.ShowDialog();
+            bool saved = SaveXML(
+                saveFD.FileName,
+                txtName.Text,
+                txtLastName.Text,
+                txtNumber.Text,
+                txtAddress.Text,
+                txtEmail.Text
+            );
+            Console.WriteLine("File Saved: " + saved);
         }
 
-        private string GenerateXML(string name, string lastname, string tel, string address, string email)
+        private bool SaveXML(string fileName, string name, string lastname, string tel, string address, string email)
         {
-            string xml = XML_TEMPLATE.Replace("~n~", name);
-            xml = XML_TEMPLATE.Replace("~a~", lastname);
-            xml = XML_TEMPLATE.Replace("~t~", tel);
-            xml = XML_TEMPLATE.Replace("~d~", address);
-            xml = XML_TEMPLATE.Replace("~e~", email);
-            return xml;
+            if (fileName != "")
+            {
+                XML xml = new XML("contacto");
+                xml.AddChild("nombre", name);
+                xml.AddChild("apellido", lastname);
+                xml.AddChild("telefono", tel);
+                xml.AddChild("direccion", address);
+                xml.AddChild("correo", email);
+
+                FileStream stream = new FileStream(fileName, FileMode.Create);
+                StreamWriter writer = new StreamWriter(stream);
+                writer.Write(xml.ToString());
+                writer.Close();
+                stream.Close();
+                return true;
+            }
+            else
+                return false;
         }
         
+    }
+
+    class XML
+    {
+        private const string HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n";
+        private XML next;
+        private XML children;
+
+        public string Tag { get; set; }
+        public string Content { get; set; }
+        public string Attribute { get; set; }
+        public enum Props { Tag = 0, Attr, Value }
+
+        public XML(string tag, string content = "", string attribute = "")
+        {
+            Tag = tag;
+            Content = content;
+            Attribute = attribute;
+            next = null;
+            children = null;
+        }
+
+        #region ADD_NODES
+        public void AddNext(XML node)
+        {
+            if (next == null)
+                next = node;
+            else
+            {
+                XML temp = next;
+                while (temp.next != null)
+                    temp = temp.next;
+                temp.next = node;
+            }
+        }
+
+        public void AddNext(string tag, string content = "")
+        {
+            XML node = new XML(tag, content);
+            AddNext(node);
+        }
+
+        public void AddChild(XML child)
+        {
+            if (children == null)
+                children = child;
+            else
+                children.AddNext(child);
+        }
+
+        public void AddChild(string tag, string content = "")
+        {
+            XML child = new XML(tag, content);
+            AddChild(child);
+        }
+
+        #endregion
+
+        #region GET_NODES
+        public XML GetChild(string tag)
+        {
+            XML child = children;
+            while (child != null)
+            {
+                if (child.Tag == tag)
+                    return child;
+                child = child.next;
+            }
+            return null;
+        }
+
+        public XML GetChild(string value, XML.Props prop)
+        {
+            XML child = children;
+            if (prop == XML.Props.Attr)
+            {
+                while (child != null)
+                {
+                    if (child.Attribute == value)
+                        return child;
+                    child = child.next;
+                }    
+            }
+            else if (prop ==  XML.Props.Tag)
+            {
+                while (child != null)
+                {
+                    if (child.Tag == value)
+                        return child;
+                    child = child.next;
+                }
+            }
+            else
+            {
+                while (child != null)
+                {
+                    if (child.Content == value)
+                        return child;
+                    child = child.next;
+                }
+            }
+            return null;
+        }
+
+        public XML GetChild(string tag, string content)
+        {
+            XML child = children;
+            while (child != null)
+            {
+                if (child.Tag == tag && child.Content == content)
+                    return child;
+                child = child.next;
+            }
+            return null;
+        }
+
+        public XML GetChild(string tag, string attribute, string content)
+        {
+            XML child = children;
+            while (child != null)
+            {
+                if (child.Tag == tag &&
+                    child.Content == content &&
+                    child.Attribute == attribute)
+                    return child;
+                child = child.next;
+            }
+            return null;
+        }
+
+        #endregion
+
+        public override string ToString()
+        {
+            if (this == null)
+                return "Empty XML";
+            else
+            {
+                string xmlData = "";
+
+                XML node = this;
+                while(node != null)
+                {
+                    xmlData += string.Format("<{0}>", node.Tag);
+                    xmlData += node.Content;
+
+                    if (node.children != null)
+                        xmlData += (node.children.ToString());
+
+                    xmlData += string.Format("</{0}>", node.Tag);
+                    node = node.next;
+                }
+                return xmlData;
+            }
+        }
     }
 }

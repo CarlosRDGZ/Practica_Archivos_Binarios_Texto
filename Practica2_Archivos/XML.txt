@@ -1,0 +1,17 @@
+public const string XML_TEMPLATE =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
+            "<contacto>\r\n" +
+            "\t<nombre>~n~</nombre>\r\n" +
+            "\t<apellido>~a~</apellido>\r\n" +
+            "\t<telefono>~t~</telefono>\r\n" +
+            "\t<direccion>~d~</direccion>\r\n" +
+            "\t<email>~e~</email>\r\n" +
+            "</contacto>";
+
+string xml = XML_TEMPLATE;
+            xml = xml.Replace("~n~", name)
+                     .Replace("~a~", lastname)
+                     .Replace("~t~", tel)
+                     .Replace("~d~", address)
+                     .Replace("~e~", email);
+            return xml;
