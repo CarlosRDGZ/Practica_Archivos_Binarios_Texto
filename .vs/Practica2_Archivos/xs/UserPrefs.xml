@@ -2,14 +2,13 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="C:\Users\Carlos\source\repos\Practica2_Archivos\Practica2_Archivos\Form1.cs" relfile="Practica2_Archivos\Form1.cs" line="121" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.ItemProperties.Practica2__Archivos PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Practica2_Archivos\Form1.cs">
     <Files>
-      <File FileName="Practica2_Archivos\Form1.cs" Line="128" Column="1" />
+      <File FileName="Practica2_Archivos\Form1.cs" Line="136" Column="33" />
+      <File FileName="Practica2_Archivos\XML.cs" Line="6" Column="26" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MultiItemStartupConfigurations />
